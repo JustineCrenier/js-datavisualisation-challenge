@@ -81,33 +81,34 @@ content.insertBefore(divGraphique3,bodyC);
 divGraphique3.setAttribute("id","divTable3");
 //AJAX
 let object = {};
-let xhr = new XMLHttpRequest;
-    //Call the open function, GET-type of request, url, true-asynchronous
-    xhr.open('GET', 'https://inside.becode.org/api/v1/data/random.json', true)
-    //call the onload 
-    xhr.onload = function() 
-        {
-            //check if the status is 200(means everything is okay)
-            if (this.status === 200) {
-                    //return server response as an object with JSON.parse
-                    object = JSON.parse(this.responseText);
-                    
-                    //creer dimple3
-                    let svg3 = dimple.newSvg("#divTable3", 400, 200);
-                    let data3 = [];
-                    for (i=0;i<object.length;i++){
-                        let dataDetail3 = {"x":object[i][0], "y":object[i][1], "Données": "données"};
-                        data3.push(dataDetail3);
-                    }
-
-                    let chart3 = new dimple.chart(svg3, data3);
-                    chart3.addCategoryAxis("x", "x");
-                    chart3.addMeasureAxis("y", "y");
-                    chart3.addSeries("Données", dimple.plot.line); 
-                    chart3.draw();
+let svg3 = dimple.newSvg("#divTable3", 600, 250);
+let data3 = [];
+let chart3 = new dimple.chart(svg3, data3);
+chart3.addCategoryAxis("x", "x");
+chart3.addMeasureAxis("y", "y");
+chart3.addSeries("Données", dimple.plot.line);
+let remoteData = () =>{
+    let xhr = new XMLHttpRequest;
+        //Call the open function, GET-type of request, url, true-asynchronous
+        xhr.open('GET', 'https://inside.becode.org/api/v1/data/random.json', true)
+        //call the onload 
+        xhr.onload = function() 
+            {
+                //check if the status is 200(means everything is okay)
+                if (this.status === 200) {
+                        //return server response as an object with JSON.parse
+                        object = JSON.parse(this.responseText);
+                        //creer dimple3
+                        for (i=0;i<object.length;i++){
+                            let dataDetail3 = {"x":object[i][0], "y":object[i][1], "Données": "données"};
+                            data3.push(dataDetail3);
+                        }
+                        chart3.draw();
+                        setInterval(remoteData, 2000);        
+                }
             }
-        }
-    //call send
-    xhr.send();
+        //call send
+        xhr.send();   
+}
+remoteData();
 
-console.log(object);
