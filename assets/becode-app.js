@@ -104,7 +104,7 @@ let remoteData = () =>{
                             data3.push(dataDetail3);
                         }
                         chart3.draw();
-                        setInterval(remoteData, 2000);        
+                        setInterval(remoteData, 1000);        
                 }
             }
         //call send
